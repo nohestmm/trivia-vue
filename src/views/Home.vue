@@ -13,12 +13,21 @@
     <button v-on:click="addmessage">Agregar mensaje</button>-->
 
     <div class="main-trivia">
-      <h1>Bienvenido a la Trivi   a</h1>
-      <h2>{{ saludo }}</h2>
+      <h1>Bienvenido a la Trivia</h1>
+      <h2>{{ addname() }}</h2>
       <label for="input-name">Tu nombre:</label>
-      <input type="text" @input="addname" />
+      <!--<input type="text" @input="addname" placeholder="tu nombre"/>-->
+      <b-form-input
+      id="input-live"
+      v-model="name"
+      :state="nameState"
+      aria-describedby="input-live-help input-live-feedback"
+      placeholder="Enter your name"
+      trim
+    ></b-form-input>
+
       <router-link to="/trivia">
-        <button :disabled="isDisabled">Empezar a jugar hoy</button>
+        <b-button :disabled="!nameState" pill variant="danger" >Empezar a jugar hoy</b-button>
       </router-link>
     </div>
   </div>
@@ -30,11 +39,12 @@ export default {
   name: "Home",
   data() {
     return {
-      message: "Hola mundo",
+      message: 'Hola mundo',
       arraylist: ["salir", "pasear", "estudiar"],
       newmessage: "",
       saludo: "",
-      estate: true
+      estate: true,
+      name:'',
     };
   },
   methods: {
@@ -45,20 +55,17 @@ export default {
     deletemessage(index) {
       this.arraylist.splice(index, 1);
     },
-    addname(e) {
-      if (e.target.value) {
-        this.saludo = "Hola " + e.target.value;
-        this.estate = false;
-      } else {
-        this.saludo = "";
-        this.estate= true;
+    addname() {
+      if (this.name) {
+        return this.saludo = "Hola " + this.name;
+        
       }
     }
   },
   computed: {
-    isDisabled() {
-      return this.estate;
-    }
+    nameState() {
+        return this.name.length > 2 ? true : false
+      }
   }
 };
 </script>
@@ -69,6 +76,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  margin: auto;
+  width:25%;
 }
 .main-trivia button {
   margin-top: 6px;
